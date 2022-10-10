@@ -22,8 +22,14 @@ var models = [
 
 var index = 0;
 var slideCount = models.length;
+var interval;
 
-showSlide(index);
+var settings = {
+    duration : "2000",
+    random : true ,
+};
+
+init(settings);
 
 document.querySelector(".fa-circle-arrow-left").addEventListener('click',function(){
     index--;
@@ -35,6 +41,47 @@ document.querySelector(".fa-circle-arrow-right").addEventListener('click',functi
     index++;
     showSlide(index);
 });
+
+document.querySelectorAll(".arrow").forEach(function(item){
+    item.addEventListener('mouseenter',function(){
+        clearInterval(interval);
+    })
+})
+
+document.querySelectorAll('.arrow').forEach(function(item){
+    item.addEventListener('mouseleave', function(){
+        init(settings);
+    })
+})
+
+
+function init(settings){
+
+    var previous;
+    interval = setInterval(function(){
+
+        if(settings.random){
+            //random index
+            do{
+                index = Math.floor(Math.random() * slideCount);        
+            }while(index == previous)
+            index = Math.floor(Math.random() * slideCount);
+            prev = index;
+        }else {
+            if(slideCount == index+1){
+                index = -1;
+            }
+            showSlide(index);
+            index++;
+        }
+
+        showSlide(index);
+
+    },settings.duration)
+
+}
+
+
 
 
 function showSlide(i){
